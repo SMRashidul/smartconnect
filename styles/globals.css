@@ -1,2 +1,2 @@
-@import "tailwindcss/preflight";
-@tailwind utilities;
+
+/* This file is no longer needed as styles are in app/globals.css */

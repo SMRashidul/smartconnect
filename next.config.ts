@@ -2,16 +2,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  experimental: {
-    turbo: {
-      resolveAlias: {
-        // Resolve symlink issues
-        'replit': false,
-      },
+  turbopack: {
+    resolveAlias: {
+      // Remove problematic replit alias
     },
   },
   // Fix cross-origin warnings
-  allowedDevOrigins: ['*.replit.dev'],
+  experimental: {
+    allowedDevOrigins: ['*.replit.dev'],
+  },
 };
 
 export default nextConfig;
