@@ -1,70 +1,97 @@
+
 'use client';
-import { useState, useEffect } from 'react';
-import { supabase } from '../../lib/supabaseClient';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+
+const applicantData = [
+  { department: 'Engineering', applicants: 45 },
+  { department: 'Marketing', applicants: 32 },
+  { department: 'Sales', applicants: 28 },
+  { department: 'Design', applicants: 15 },
+];
+
+const hiringFunnelData = [
+  { name: 'Applications', value: 120, color: '#3B82F6' },
+  { name: 'Screen', value: 80, color: '#10B981' },
+  { name: 'Interview', value: 40, color: '#F59E0B' },
+  { name: 'Offer', value: 15, color: '#EF4444' },
+];
 
 export default function CompanyDashboard() {
-  const [data, setData] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const { data: userData } = await supabase.auth.getUser();
-      if (userData.user) {
-        const { data: companyData, error: fetchError } = await supabase
-          .from('companies')
-          .select('satisfaction_rating')
-          .eq('contact_email', userData.user.email)
-          .single();
-        if (fetchError) {
-          setError(fetchError.message);
-        } else if (companyData) {
-          setData([{ name: 'Satisfaction', value: companyData.satisfaction_rating || 0 }]);
-        }
-      }
-      setLoading(false);
-    };
-    fetchData();
-  }, []);
-
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Project Scope</CardTitle>
+          <CardTitle className="text-2xl">Company Dashboard</CardTitle>
         </CardHeader>
         <CardContent>
-          <Input placeholder="Submit Scope" />
-          <Button className="mt-2">Submit</Button>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="bg-blue-50 p-4 rounded-lg text-center">
+              <h3 className="text-2xl font-bold text-blue-600">8</h3>
+              <p className="text-sm text-gray-600">Open Positions</p>
+            </div>
+            <div className="bg-green-50 p-4 rounded-lg text-center">
+              <h3 className="text-2xl font-bold text-green-600">120</h3>
+              <p className="text-sm text-gray-600">Total Applications</p>
+            </div>
+            <div className="bg-purple-50 p-4 rounded-lg text-center">
+              <h3 className="text-2xl font-bold text-purple-600">15</h3>
+              <p className="text-sm text-gray-600">Interviews This Week</p>
+            </div>
+            <div className="bg-orange-50 p-4 rounded-lg text-center">
+              <h3 className="text-2xl font-bold text-orange-600">5</h3>
+              <p className="text-sm text-gray-600">Offers Extended</p>
+            </div>
+          </div>
         </CardContent>
       </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>Satisfaction Trend</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {loading ? (
-            <p>Loading...</p>
-          ) : error ? (
-            <p className="text-red-500">{error}</p>
-          ) : data.length > 0 ? (
-            <ResponsiveContainer width="100%" height={200}>
-              <BarChart data={data}>
-                <Bar dataKey="value" fill="#82ca9d" />
-                <XAxis dataKey="name" />
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Applications by Department</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={applicantData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="department" />
                 <YAxis />
                 <Tooltip />
+                <Bar dataKey="applicants" fill="#3B82F6" />
               </BarChart>
             </ResponsiveContainer>
-          ) : (
-            <p>No satisfaction data available.</p>
-          )}
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Hiring Funnel</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  data={hiringFunnelData}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  label={({ name, value }) => `${name}: ${value}`}
+                  outerRadius={80}
+                  fill="#8884d8"
+                  dataKey="value"
+                >
+                  {hiringFunnelData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
