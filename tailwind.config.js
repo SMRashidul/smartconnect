@@ -27,18 +27,15 @@ module.exports = {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
-        // Stardew Valley inspired colors
-        valley: {
-          green: '#4ade80',
-          blue: '#3b82f6',
-          yellow: '#fbbf24',
-          orange: '#fb923c',
-          purple: '#a855f7',
-          pink: '#ec4899',
-          red: '#ef4444',
-          emerald: '#10b981',
-          sky: '#0ea5e9',
-          indigo: '#6366f1',
+        // Professional color palette inspired by Westcliff University
+        westcliff: {
+          'primary': '#1e40af',
+          'secondary': '#3b82f6',
+          'accent': '#f59e0b',
+          'gold': '#fbbf24',
+          'navy': '#1e3a8a',
+          'slate': '#64748b',
+          'gray': '#6b7280',
         }
       },
       borderRadius: {
