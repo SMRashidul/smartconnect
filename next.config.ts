@@ -1,16 +1,13 @@
 
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  turbopack: {
-    resolveAlias: {
-      // Remove problematic replit alias
-    },
-  },
-  // Fix cross-origin warnings
   experimental: {
-    allowedDevOrigins: ['*.replit.dev'],
+    allowedDevOrigins: ['*.replit.dev', '*.replit.co']
   },
-};
+  images: {
+    domains: ['via.placeholder.com']
+  }
+}
 
-export default nextConfig;
+export default nextConfig
